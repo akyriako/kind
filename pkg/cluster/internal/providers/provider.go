@@ -43,6 +43,10 @@ type Provider interface {
 	// These should be from results previously returned by this provider
 	// E.G. by ListNodes()
 	StopNodes([]nodes.Node) error
+	// StartNodes starts the provided list of nodes
+	// These should be from results previously returned by this provider
+	// E.G. by ListNodes()
+	StartNodes([]nodes.Node) error
 	// GetAPIServerEndpoint returns the host endpoint for the cluster's API server
 	GetAPIServerEndpoint(cluster string) (string, error)
 	// GetAPIServerInternalEndpoint returns the internal network endpoint for the cluster's API server

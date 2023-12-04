@@ -19,6 +19,7 @@ package cluster
 import (
 	"os"
 	"path/filepath"
+	internalstart "sigs.k8s.io/kind/pkg/cluster/internal/start"
 	"sort"
 
 	"sigs.k8s.io/kind/pkg/cmd/kind/version"
@@ -190,6 +191,11 @@ func (p *Provider) Delete(name, explicitKubeconfigPath string) error {
 // Stop a kubernetes-in-docker cluster
 func (p *Provider) Stop(name, explicitKubeconfigPath string) error {
 	return internalstop.Cluster(p.logger, p.provider, defaultName(name), explicitKubeconfigPath)
+}
+
+// Start a kubernetes-in-docker cluster
+func (p *Provider) Start(name, explicitKubeconfigPath string) error {
+	return internalstart.Cluster(p.logger, p.provider, defaultName(name), explicitKubeconfigPath)
 }
 
 // List returns a list of clusters for which nodes exist

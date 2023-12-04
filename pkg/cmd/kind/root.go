@@ -19,6 +19,7 @@ package kind
 
 import (
 	"io"
+	"sigs.k8s.io/kind/pkg/cmd/kind/start"
 	"sigs.k8s.io/kind/pkg/cmd/kind/stop"
 
 	"github.com/spf13/cobra"
@@ -84,6 +85,7 @@ func NewCommand(logger log.Logger, streams cmd.IOStreams) *cobra.Command {
 	cmd.AddCommand(create.NewCommand(logger, streams))
 	cmd.AddCommand(delete.NewCommand(logger, streams))
 	cmd.AddCommand(stop.NewCommand(logger, streams))
+	cmd.AddCommand(start.NewCommand(logger, streams))
 	cmd.AddCommand(export.NewCommand(logger, streams))
 	cmd.AddCommand(get.NewCommand(logger, streams))
 	cmd.AddCommand(version.NewCommand(logger, streams))
