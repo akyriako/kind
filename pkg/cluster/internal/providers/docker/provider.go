@@ -159,7 +159,7 @@ func (p *provider) StopNodes(n []nodes.Node) error {
 		return nil
 	}
 	const command = "docker"
-	args := make([]string, 0, len(n)+3) // allocate once
+	args := make([]string, 0, len(n)+1) // allocate once
 	args = append(args,
 		"stop",
 	)
@@ -178,7 +178,7 @@ func (p *provider) StartNodes(n []nodes.Node) error {
 		return nil
 	}
 	const command = "docker"
-	args := make([]string, 0, len(n)+3) // allocate once
+	args := make([]string, 0, len(n)+1) // allocate once
 	args = append(args,
 		"start",
 	)
