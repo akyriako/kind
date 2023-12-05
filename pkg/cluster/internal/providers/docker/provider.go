@@ -68,7 +68,7 @@ func (p *provider) Provision(status *cli.Status, cfg *config.Cluster) (err error
 		return err
 	}
 
-	// ensure the pre-requisite network exists
+	// ensure the pre-requisite ne/home/akyriako/go/src/github.com/akyriako/kindtwork exists
 	networkName := fixedNetworkName
 	if n := os.Getenv("KIND_EXPERIMENTAL_DOCKER_NETWORK"); n != "" {
 		p.logger.Warn("WARNING: Overriding docker network due to KIND_EXPERIMENTAL_DOCKER_NETWORK")
@@ -115,7 +115,7 @@ func (p *provider) ListClusters() ([]string, error) {
 func (p *provider) ListNodes(cluster string) ([]nodes.Node, error) {
 	cmd := exec.Command("docker",
 		"ps",
-		"-a", // show stopped nodes
+		"-a", // show stop/home/akyriako/go/src/github.com/akyriako/kindped nodes
 		// filter for nodes with the cluster label
 		"--filter", fmt.Sprintf("label=%s=%s", clusterLabelKey, cluster),
 		// format to include the cluster name

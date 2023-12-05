@@ -17,10 +17,10 @@ limitations under the License.
 package start
 
 import (
+	"sigs.k8s.io/kind/pkg/cluster/internal/providers"
+	"sigs.k8s.io/kind/pkg/cluster/nodeutils"
 	"sigs.k8s.io/kind/pkg/errors"
 	"sigs.k8s.io/kind/pkg/log"
-
-	"sigs.k8s.io/kind/pkg/cluster/internal/providers"
 )
 
 // Cluster starts the cluster identified by ctx
@@ -38,6 +38,54 @@ func Cluster(logger log.Logger, p providers.Provider, name, explicitKubeconfigPa
 			return err
 		}
 		logger.V(0).Infof("Started nodes: %q", n)
+	}
+
+	// identify external load balancer node
+	loadBalancerNode, err := nodeutils.ExternalLoadBalancerNode(n)
+	if err != nil {
+		return err
+	}
+
+	if loadBalancerNode != nil {
+		//err = p.DeleteNodes(lb)
+		//if err != nil {
+		//	return err
+		//}
+
+		//var backendServers = map[string]string{}
+		//controlPlaneNodes, err := nodeutils.SelectNodesByRole(
+		//	n,
+		//	constants.ControlPlaneNodeRoleValue,
+		//)
+		//if err != nil {
+		//	return err
+		//}
+		//for _, n := range controlPlaneNodes {
+		//	backendServers[n.String()] = fmt.Sprintf("%s:%d", n.String(), common.APIServerInternalPort)
+		//}
+
+		//// create loadbalancer config data
+		//loadbalancerConfig, err := loadbalancer.Config(&loadbalancer.ConfigData{
+		//	ControlPlanePort: common.APIServerInternalPort,
+		//	BackendServers:   backendServers,
+		//	IPv6:             false, //ctx.Config.Networking.IPFamily == config.IPv6Family,
+		//})
+		//if err != nil {
+		//	return errors.Wrap(err, "failed to generate loadbalancer config data")
+		//}
+		//
+		//// create loadbalancer config on the node
+		//if err := nodeutils.WriteFile(loadBalancerNode, loadbalancer.ConfigPath, loadbalancerConfig); err != nil {
+		//	// TODO: logging here
+		//	return errors.Wrap(err, "failed to copy loadbalancer config to node")
+		//}
+
+		// reload the config. haproxy will reload on SIGHUP
+		if err := loadBalancerNode.Command("kill", "-s", "HUP", "1").Run(); err != nil {
+			return errors.Wrap(err, "failed to reload loadbalancer")
+		}
+
+		logger.V(0).Infof("Reloaded node: %q", loadBalancerNode)
 	}
 
 	return nil
